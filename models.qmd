@@ -11,4 +11,4 @@ execute: echo: false
 library(tidyverse)
 ```
 
-Using a dataset comprised of a YouGov poll of 1559 US adult citizens from March 10-12, 2024, with people indicating a 1 (voting for Biden) or 0 (other), we will use it as a sample to determine percent for Biden in the election.
+Using a dataset comprised of a YouGov poll of 1559 US adult citizens from March 10-12, 2024, with people indicating a 1 (voting for Biden) or 0 (other), we will use it as a sample to determine percent for Biden in the election. However, validity may not be total due to the nature of polls and that Biden's popularity is likely to vary over time.
