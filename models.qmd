@@ -1,0 +1,14 @@
+---
+title: "Models"
+author: "Jacob Hardin-Bernhardt"
+format: html
+execute: echo: false
+---
+
+```{r}
+#| label: setup
+#| message: FALSE
+library(tidyverse)
+```
+
+Using a dataset comprised of a YouGov poll of 1559 US adult citizens from March 10-12, 2024, with people indicating a 1 (voting for Biden) or 0 (other), we will use it as a sample to determine percent for Biden in the election.
