@@ -2,13 +2,50 @@
 title: "Models"
 author: "Jacob Hardin-Bernhardt"
 format: html
-execute: echo: false
+execute: 
+  echo: FALSE
 ---
 
 ```{r}
 #| label: setup
 #| message: FALSE
 library(tidyverse)
+library(brms)
+library(tidybayes)
+library(gtsummary)
 ```
 
-Using a dataset comprised of a YouGov poll of 1559 US adult citizens from March 10-12, 2024, with people indicating a 1 (voting for Biden) or 0 (other), we will use it as a sample to determine percent for Biden in the election. However, validity may not be total due to the nature of polls and that Biden's popularity is likely to vary over time.
+
+```{r}
+#| label: model
+#| cache: TRUE
+poll_data <- tibble(biden = c(rep(1, 655), 
+                              rep(0, 904)))
+
+slice_sample(poll_data, n = 10)
+fit_bern<-brm(formula = biden ~ 1,
+    data = poll_data,
+    family = bernoulli(),
+    refresh = 0,
+    silent = 2,
+    seed = 9)
+```
+```{r}
+#| label: plot
+ndata=tibble(.rows = 1)
+
+fit_bern |>add_epred_draws(ndata) |>select(.epred) |>ggplot(aes(x=.epred))+
+  geom_density(aes(y = after_stat(count / sum(count)))) +
+ scale_x_continuous(labels = scales::percent_format()) +
+ scale_y_continuous(labes = scales::percent_format())+
+ labs(x="Proportion, p, of red beads in urn",y="Probability",title="Posterior Distribution for p")
+```
+
+
+Using a dataset comprised of a YouGov poll of 1559 US adult citizens from March 10-12, 2024, with people indicating a 1 (voting for Biden) or 0 (other), we will use it as a sample to determine percent for Biden in the election. However, validity may not be total due to the nature of polls and that Biden's popularity is likely to vary over time. The QoI is the percentage of people who will vote for Biden, an estimated ~41% with a margin of error of 2.5%.
+
+$$ biden_i =  \mu + \epsilon_i $$
+```{r}
+tbl_regression(fit_bern, intercept = TRUE)
+```
+
